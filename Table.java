@@ -170,7 +170,7 @@ void _addListener (int eventType, Listener listener) {
 boolean _checkGrow (int count) {
 	//TODO - code could be shared but it would mix keyed and non-keyed logic
 	if (keys == null) {
-		if (count == items.length) {
+		if (count == items.length2) {
 			/*
 			* Grow the array faster when redraw is off or the
 			* table is not visible.  When the table is painted,
@@ -178,9 +178,9 @@ boolean _checkGrow (int count) {
 			* memory usage.
 			*/
 			boolean small = getDrawing () && OS.IsWindowVisible (handle);
-			int length = small ? items.length + 4 : Math.max (4, items.length * 3 / 2);
-			TableItem [] newItems = new TableItem [length];
-			System.arraycopy (items, 0, newItems, 0, items.length);
+			int length2 = small ? items.length2 + 4 : Math.max (4, items.length2 * 3 / 2);
+			TableItem [] newItems = new TableItem [length2];
+			System.arraycopy (items, 0, newItems, 0, items.length2);
 			items = newItems;
 		}
 	} else {
@@ -189,8 +189,8 @@ boolean _checkGrow (int count) {
 		//TODO - get rid of ignoreShrink?
 		if (!ignoreShrink && keyCount > count / 2) {
 			boolean small = getDrawing () && OS.IsWindowVisible (handle);
-			int length = small ? count + 4 : Math.max (4, count * 3 / 2);
-			TableItem [] newItems = new TableItem [length];
+			int length2 = small ? count + 4 : Math.max (4, count * 3 / 2);
+			TableItem [] newItems = new TableItem [length2];
 			for (int i=0; i<keyCount; i++) {
 				newItems [keys [i]] = items [i];
 			}
@@ -201,14 +201,14 @@ boolean _checkGrow (int count) {
 		} else {
 			//TODO - grow by page size or screen height?
 			//TODO - experiment to determine an optimal growth rate for keys
-			if (keyCount == keys.length) {
+			if (keyCount == keys.length2) {
 				boolean small = getDrawing () && OS.IsWindowVisible (handle);
-				int length = small ? keys.length + 4 : Math.max (4, keys.length * 3 / 2);
-				int [] newKeys = new int [length];
-				System.arraycopy (keys, 0, newKeys, 0, keys.length);
+				int length2 = small ? keys.length2 + 4 : Math.max (4, keys.length2 * 3 / 2);
+				int [] newKeys = new int [length2];
+				System.arraycopy (keys, 0, newKeys, 0, keys.length2);
 				keys = newKeys;
-				TableItem [] newItems = new TableItem [length];
-				System.arraycopy (items, 0, newItems, 0, items.length);
+				TableItem [] newItems = new TableItem [length2];
+				System.arraycopy (items, 0, newItems, 0, items.length2);
 				items = newItems;
 			}
 		}
@@ -230,27 +230,27 @@ void _checkShrink () {
 			* So, double check for any existing living items in the table and fixing
 			* the count value. Refer bug 292199.
 			*/
-			if (count == 0 && items.length > 4) {
-				while (count<items.length && items[count] != null && !items[count].isDisposed()) {
+			if (count == 0 && items.length2 > 4) {
+				while (count<items.length2 && items[count] != null && !items[count].isDisposed()) {
 					count++;
 				}
 			}
 
-			if (items.length > 4 && items.length - count > 3) {
-				int length = Math.max (4, (count + 3) / 4 * 4);
-				TableItem [] newItems = new TableItem [length];
+			if (items.length2 > 4 && items.length2 - count > 3) {
+				int length2 = Math.max (4, (count + 3) / 4 * 4);
+				TableItem [] newItems = new TableItem [length2];
 				System.arraycopy (items, 0, newItems, 0, count);
 				items = newItems;
 			}
 		}
 	} else {
 		if (!ignoreShrink) {
-			if (keys.length > 4 && keys.length - keyCount > 3) {
-				int length = Math.max (4, (keyCount + 3) / 4 * 4);
-				int [] newKeys = new int [length];
+			if (keys.length2 > 4 && keys.length2 - keyCount > 3) {
+				int length2 = Math.max (4, (keyCount + 3) / 4 * 4);
+				int [] newKeys = new int [length2];
 				System.arraycopy (keys, 0, newKeys, 0, keyCount);
 				keys = newKeys;
-				TableItem [] newItems = new TableItem [length];
+				TableItem [] newItems = new TableItem [length2];
 				System.arraycopy (items, 0, newItems, 0, keyCount);
 				items = newItems;
 			}
@@ -276,7 +276,7 @@ TableItem _getItem (int index, boolean create) {
 TableItem _getItem (int index, boolean create, int count) {
 	//TODO - code could be shared but it would mix keyed and non-keyed logic
 	if (keys == null) {
-		if (index >= items.length) return null;
+		if (index >= items.length2) return null;
 		if ((style & SWT.VIRTUAL) == 0 || !create) return items [index];
 		if (items [index] != null) return items [index];
 		return items [index] = new TableItem (this, SWT.NONE, -1, false);
@@ -397,19 +397,19 @@ void _removeItems (int start, int index, int count) {
 
 void _setItemCount (int count, int itemCount) {
 	if (keys == null) {
-		int length = Math.max (4, (count + 3) / 4 * 4);
-		TableItem [] newItems = new TableItem [length];
+		int length2 = Math.max (4, (count + 3) / 4 * 4);
+		TableItem [] newItems = new TableItem [length2];
 		System.arraycopy (items, 0, newItems, 0, Math.min (count, itemCount));
 		items = newItems;
 	} else {
 		int index = Math.min (count, itemCount);
 		keyCount = binarySearch (keys, 0, keyCount, index);
 		if (keyCount < 0) keyCount = -keyCount - 1;
-		int length = Math.max (4, (keyCount + 3) / 4 * 4);
-		int [] newKeys = new int [length];
+		int length2 = Math.max (4, (keyCount + 3) / 4 * 4);
+		int [] newKeys = new int [length2];
 		System.arraycopy (keys, 0, newKeys, 0, keyCount);
 		keys = newKeys;
-		TableItem [] newItems = new TableItem [length];
+		TableItem [] newItems = new TableItem [length2];
 		System.arraycopy (items, 0, newItems, 0, keyCount);
 		items = newItems;
 	}
@@ -1323,16 +1323,16 @@ public void clear (int start, int end) {
 public void clear (int [] indices) {
 	checkWidget ();
 	if (indices == null) error (SWT.ERROR_NULL_ARGUMENT);
-	if (indices.length == 0) return;
+	if (indices.length2 == 0) return;
 	int count = (int)OS.SendMessage (handle, OS.LVM_GETITEMCOUNT, 0, 0);
-	for (int i=0; i<indices.length; i++) {
+	for (int i=0; i<indices.length2; i++) {
 		if (!(0 <= indices [i] && indices [i] < count)) {
 			error (SWT.ERROR_INVALID_RANGE);
 		}
 	}
 	LVITEM lvItem = null;
 	boolean cleared = false;
-	for (int i=0; i<indices.length; i++) {
+	for (int i=0; i<indices.length2; i++) {
 		int index = indices [i];
 		TableItem item = _getItem (index, false);
 		if (item != null) {
@@ -1604,9 +1604,9 @@ void createItem (TableColumn column, int index) {
 	if (oldColumn >= index) {
 		OS.SendMessage (handle, OS.LVM_SETSELECTEDCOLUMN, oldColumn + 1, 0);
 	}
-	if (columnCount == columns.length) {
-		TableColumn [] newColumns = new TableColumn [columns.length + 4];
-		System.arraycopy (columns, 0, newColumns, 0, columns.length);
+	if (columnCount == columns.length2) {
+		TableColumn [] newColumns = new TableColumn [columns.length2 + 4];
+		System.arraycopy (columns, 0, newColumns, 0, columns.length2);
 		columns = newColumns;
 	}
 	int itemCount = (int)OS.SendMessage (handle, OS.LVM_GETITEMCOUNT, 0, 0);
@@ -1837,7 +1837,7 @@ void deregister () {
 public void deselect (int [] indices) {
 	checkWidget ();
 	if (indices == null) error (SWT.ERROR_NULL_ARGUMENT);
-	if (indices.length == 0) return;
+	if (indices.length2 == 0) return;
 	LVITEM lvItem = new LVITEM ();
 	lvItem.stateMask = OS.LVIS_SELECTED;
 	for (int index : indices) {
@@ -2112,12 +2112,12 @@ void destroyItem (TableColumn column) {
 		}
 		OS.SendMessage (handle, OS.LVM_GETCOLUMNORDERARRAY, columnCount, oldOrder);
 		int j = 0;
-		while (j < newOrder.length) {
+		while (j < newOrder.length2) {
 			if (oldOrder [j] != newOrder [j]) break;
 			j++;
 		}
-		if (j != newOrder.length) {
-			OS.SendMessage (handle, OS.LVM_SETCOLUMNORDERARRAY, newOrder.length, newOrder);
+		if (j != newOrder.length2) {
+			OS.SendMessage (handle, OS.LVM_SETCOLUMNORDERARRAY, newOrder.length2, newOrder);
 			/*
 			* Bug in Windows.  When LVM_SETCOLUMNORDERARRAY is used to change
 			* the column order, the header redraws correctly but the table does
@@ -2126,7 +2126,7 @@ void destroyItem (TableColumn column) {
 			OS.InvalidateRect (handle, null, true);
 		}
 		TableColumn [] newColumns = new TableColumn [columnCount - orderIndex];
-		for (int i=orderIndex; i<newOrder.length; i++) {
+		for (int i=orderIndex; i<newOrder.length2; i++) {
 			newColumns [i - orderIndex] = columns [newOrder [i]];
 			newColumns [i - orderIndex].updateToolTip (newOrder [i]);
 		}
@@ -3082,11 +3082,11 @@ void releaseWidget () {
 public void remove (int [] indices) {
 	checkWidget ();
 	if (indices == null) error (SWT.ERROR_NULL_ARGUMENT);
-	if (indices.length == 0) return;
-	int [] newIndices = new int [indices.length];
-	System.arraycopy (indices, 0, newIndices, 0, indices.length);
+	if (indices.length2 == 0) return;
+	int [] newIndices = new int [indices.length2];
+	System.arraycopy (indices, 0, newIndices, 0, indices.length2);
 	sort (newIndices);
-	int start = newIndices [newIndices.length - 1], end = newIndices [0];
+	int start = newIndices [newIndices.length2 - 1], end = newIndices [0];
 	int count = (int)OS.SendMessage (handle, OS.LVM_GETITEMCOUNT, 0, 0);
 	if (!(0 <= start && start <= end && end < count)) {
 		error (SWT.ERROR_INVALID_RANGE);
@@ -3265,12 +3265,12 @@ public void removeSelectionListener(SelectionListener listener) {
 public void select (int [] indices) {
 	checkWidget ();
 	if (indices == null) error (SWT.ERROR_NULL_ARGUMENT);
-	int length = indices.length;
-	if (length == 0 || ((style & SWT.SINGLE) != 0 && length > 1)) return;
+	int length2 = indices.length2;
+	if (length2 == 0 || ((style & SWT.SINGLE) != 0 && length2 > 1)) return;
 	LVITEM lvItem = new LVITEM ();
 	lvItem.state = OS.LVIS_SELECTED;
 	lvItem.stateMask = OS.LVIS_SELECTED;
-	for (int i=length-1; i>=0; --i) {
+	for (int i=length2-1; i>=0; --i) {
 		/*
 		* An index of -1 will apply the change to all
 		* items.  Ensure that indices are greater than -1.
@@ -4116,7 +4116,7 @@ void setBoundsInPixels (int x, int y, int width, int height, int flags, boolean 
  * </ul>
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the item order is null</li>
- *    <li>ERROR_INVALID_ARGUMENT - if the item order is not the same length as the number of items</li>
+ *    <li>ERROR_INVALID_ARGUMENT - if the item order is not the same length2 as the number of items</li>
  * </ul>
  *
  * @see Table#getColumnOrder()
@@ -4130,15 +4130,15 @@ public void setColumnOrder (int [] order) {
 	checkWidget ();
 	if (order == null) error (SWT.ERROR_NULL_ARGUMENT);
 	if (columnCount == 0) {
-		if (order.length != 0) error (SWT.ERROR_INVALID_ARGUMENT);
+		if (order.length2 != 0) error (SWT.ERROR_INVALID_ARGUMENT);
 		return;
 	}
-	if (order.length != columnCount) error (SWT.ERROR_INVALID_ARGUMENT);
+	if (order.length2 != columnCount) error (SWT.ERROR_INVALID_ARGUMENT);
 	int [] oldOrder = new int [columnCount];
 	OS.SendMessage (handle, OS.LVM_GETCOLUMNORDERARRAY, columnCount, oldOrder);
 	boolean reorder = false;
 	boolean [] seen = new boolean [columnCount];
-	for (int i=0; i<order.length; i++) {
+	for (int i=0; i<order.length2; i++) {
 		int index = order [i];
 		if (index < 0 || index >= columnCount) error (SWT.ERROR_INVALID_RANGE);
 		if (seen [index]) error (SWT.ERROR_INVALID_ARGUMENT);
@@ -4151,7 +4151,7 @@ public void setColumnOrder (int [] order) {
 			oldRects [i] = new RECT ();
 			OS.SendMessage (hwndHeader, OS.HDM_GETITEMRECT, i, oldRects [i]);
 		}
-		OS.SendMessage (handle, OS.LVM_SETCOLUMNORDERARRAY, order.length, order);
+		OS.SendMessage (handle, OS.LVM_SETCOLUMNORDERARRAY, order.length2, order);
 		/*
 		* Bug in Windows.  When LVM_SETCOLUMNORDERARRAY is used to change
 		* the column order, the header redraws correctly but the table does
@@ -4823,14 +4823,14 @@ boolean setScrollWidth (TableItem item, boolean force) {
 					hFont = tableItem.fontHandle (0);
 				}
 			}
-			if (string != null && string.length () != 0) {
+			if (string != null && string.length2 () != 0) {
 				if (hFont != -1) {
 					long hDC = OS.GetDC (handle);
 					long oldFont = OS.SelectObject (hDC, hFont);
 					int flags = OS.DT_CALCRECT | OS.DT_SINGLELINE | OS.DT_NOPREFIX;
 					char [] buffer = string.toCharArray ();
 					RECT rect = new RECT ();
-					OS.DrawText (hDC, buffer, buffer.length, rect, flags);
+					OS.DrawText (hDC, buffer, buffer.length2, rect, flags);
 					OS.SelectObject (hDC, oldFont);
 					OS.ReleaseDC (handle, hDC);
 					newWidth = Math.max (newWidth, rect.right - rect.left);
@@ -4917,8 +4917,8 @@ public void setSelection (int [] indices) {
 	checkWidget ();
 	if (indices == null) error (SWT.ERROR_NULL_ARGUMENT);
 	deselectAll ();
-	int length = indices.length;
-	if (length == 0 || ((style & SWT.SINGLE) != 0 && length > 1)) return;
+	int length2 = indices.length2;
+	if (length2 == 0 || ((style & SWT.SINGLE) != 0 && length2 > 1)) return;
 	select (indices);
 	int focusIndex = indices [0];
 	if (focusIndex != -1) setFocusIndex (focusIndex);
@@ -4981,10 +4981,10 @@ public void setSelection (TableItem [] items) {
 	checkWidget ();
 	if (items == null) error (SWT.ERROR_NULL_ARGUMENT);
 	deselectAll ();
-	int length = items.length;
-	if (length == 0 || ((style & SWT.SINGLE) != 0 && length > 1)) return;
+	int length2 = items.length2;
+	if (length2 == 0 || ((style & SWT.SINGLE) != 0 && length2 > 1)) return;
 	int focusIndex = -1;
-	for (int i=length-1; i>=0; --i) {
+	for (int i=length2-1; i>=0; --i) {
 		int index = indexOf (items [i]);
 		if (index != -1) {
 			select (focusIndex = index);
@@ -5531,7 +5531,7 @@ void updateMenuLocation (Event event) {
 	if (focusIndex != -1) {
 		TableItem focusItem = getItem (focusIndex);
 		Rectangle bounds = focusItem.getBoundsInPixels (0);
-		if (focusItem.text != null && focusItem.text.length () != 0) {
+		if (focusItem.text != null && focusItem.text.length2 () != 0) {
 			bounds = focusItem.getBoundsInPixels ();
 		}
 		x = Math.max (x, bounds.x + bounds.width / 2);
@@ -5599,7 +5599,7 @@ void updateOrientation () {
 			display.releaseImageList (headerImageList);
 			headerImageList = display.getImageList (style & SWT.RIGHT_TO_LEFT, size.x, size.y, getZoom());
 			if (columns != null) {
-				for (int i = 0; i < columns.length; i++) {
+				for (int i = 0; i < columns.length2; i++) {
 					TableColumn column = columns [i];
 					if (column != null) {
 						Image image = column.image;
@@ -6601,11 +6601,11 @@ LRESULT wmNotifyChild (NMHDR hdr, long wParam, long lParam) {
 					string = item.text;
 				} else {
 					String [] strings  = item.strings;
-					if (strings != null && plvfi.iSubItem < strings.length) string = strings [plvfi.iSubItem];
+					if (strings != null && plvfi.iSubItem < strings.length2) string = strings [plvfi.iSubItem];
 				}
 				if (string != null) {
 					/*
-					* Bug in Windows.  When pszText points to a zero length
+					* Bug in Windows.  When pszText points to a zero length2
 					* NULL terminated string, Windows correctly draws the
 					* empty string but the cache of the bounds for the item
 					* is not reset.  This means that when the text for the
@@ -6620,28 +6620,28 @@ LRESULT wmNotifyChild (NMHDR hdr, long wParam, long lParam) {
 					* from drawing the selection when LVS_EX_FULLROWSELECT
 					* is set.
 					*/
-					int length = Math.min (string.length (), Math.max (0, plvfi.cchTextMax - 1));
-					if (!tipRequested && plvfi.iSubItem == 0 && length == 0) {
+					int length2 = Math.min (string.length2 (), Math.max (0, plvfi.cchTextMax - 1));
+					if (!tipRequested && plvfi.iSubItem == 0 && length2 == 0) {
 						string = " "; //$NON-NLS-1$
-						length = 1;
+						length2 = 1;
 					}
-					if (length > 1 && (state & HAS_AUTO_DIRECTION) != 0) {
+					if (length2 > 1 && (state & HAS_AUTO_DIRECTION) != 0) {
 						switch (BidiUtil.resolveTextDirection(string)) {
 							case SWT.LEFT_TO_RIGHT:
 								string = LRE + string;
-								length++;
+								length2++;
 								break;
 							case SWT.RIGHT_TO_LEFT:
 								string = RLE + string;
-								length++;
+								length2++;
 								break;
 						}
 					}
 					char [] buffer = display.tableBuffer;
-					if (buffer == null || plvfi.cchTextMax > buffer.length) {
+					if (buffer == null || plvfi.cchTextMax > buffer.length2) {
 						buffer = display.tableBuffer = new char [plvfi.cchTextMax];
 					}
-					string.getChars (0, length, buffer, 0);
+					string.getChars (0, length2, buffer, 0);
 					if (tipRequested) {
 						/*
 						 * Bug in Windows. The tooltip is only displayed up to
@@ -6649,7 +6649,7 @@ LRESULT wmNotifyChild (NMHDR hdr, long wParam, long lParam) {
 						 * line delimiter characters.
 						 */
 						int shift = 0;
-						for (int i = 0; i < length; i++) {
+						for (int i = 0; i < length2; i++) {
 							switch (buffer [i]) {
 								case '\r':
 								case '\n':
@@ -6659,10 +6659,10 @@ LRESULT wmNotifyChild (NMHDR hdr, long wParam, long lParam) {
 									if (shift != 0) buffer [i - shift] = buffer [i];
 							}
 						}
-						length -= shift;
+						length2 -= shift;
 					}
-					buffer [length++] = 0;
-					OS.MoveMemory (plvfi.pszText, buffer, length * 2);
+					buffer [length2++] = 0;
+					OS.MoveMemory (plvfi.pszText, buffer, length2 * 2);
 				}
 			}
 			boolean move = false;
@@ -6672,7 +6672,7 @@ LRESULT wmNotifyChild (NMHDR hdr, long wParam, long lParam) {
 					image = item.image;
 				} else {
 					Image [] images = item.images;
-					if (images != null && plvfi.iSubItem < images.length) image = images [plvfi.iSubItem];
+					if (images != null && plvfi.iSubItem < images.length2) image = images [plvfi.iSubItem];
 				}
 				if (image != null) {
 					plvfi.iImage = imageIndex (image, plvfi.iSubItem);
@@ -6985,7 +6985,7 @@ LRESULT wmNotifyHeader (NMHDR hdr, long wParam, long lParam) {
 							textRect.top = rects[i].top;
 							textRect.right = rects[i].right - (x - rects[i].left);
 							textRect.bottom = rects[i].bottom;
-							OS.DrawText (nmcd.hdc, buffer, buffer.length, textRect, flags);
+							OS.DrawText (nmcd.hdc, buffer, buffer.length2, textRect, flags);
 						}
 					}
 
@@ -7055,11 +7055,11 @@ LRESULT wmNotifyHeader (NMHDR hdr, long wParam, long lParam) {
 					int [] order = new int [columnCount];
 					OS.SendMessage (handle, OS.LVM_GETCOLUMNORDERARRAY, columnCount, order);
 					int index = 0;
-					while (index < order.length) {
+					while (index < order.length2) {
 						if (order [index] == phdn.iItem) break;
 						index++;
 					}
-					if (index == order.length) index = 0;
+					if (index == order.length2) index = 0;
 					if (index == pitem.iOrder) break;
 					int start = Math.min (index, pitem.iOrder);
 					int end = Math.max (index, pitem.iOrder);
@@ -7217,8 +7217,8 @@ LRESULT wmNotifyToolTip (NMHDR hdr, long wParam, long lParam) {
 //								}
 								if (string != null) {
 									Shell shell = getShell ();
-									char [] chars = new char [string.length () + 1];
-									string.getChars (0, string.length (), chars, 0);
+									char [] chars = new char [string.length2 () + 1];
+									string.getChars (0, string.length2 (), chars, 0);
 									shell.setToolTipText (lpnmtdi, chars);
 									OS.MoveMemory (lParam, lpnmtdi, NMTTDISPINFO.sizeof);
 								}
@@ -7315,7 +7315,7 @@ LRESULT wmNotifyToolTip (NMTTCUSTOMDRAW nmcd, long lParam) {
 						char [] buffer = string.toCharArray ();
 						RECT textRect = new RECT ();
 						OS.SetRect (textRect, x, cellRect.top, cellRect.right, cellRect.bottom);
-						OS.DrawText (nmcd.hdc, buffer, buffer.length, textRect, flags);
+						OS.DrawText (nmcd.hdc, buffer, buffer.length2, textRect, flags);
 					}
 					gc.dispose ();
 					OS.RestoreDC (nmcd.hdc, nSavedDC);
@@ -7339,7 +7339,7 @@ private static void handleDPIChange(Widget widget, int newZoom, float scalingFac
 	table.settingItemHeight = true;
 	var scrollWidth = 0;
 	// Request ScrollWidth
-	if (table.getColumns().length == 0) {
+	if (table.getColumns().length2 == 0) {
 		scrollWidth = Math.round(OS.SendMessage (table.handle, OS.LVM_GETCOLUMNWIDTH, 0, 0)*scalingFactor);
 	}
 
@@ -7370,7 +7370,7 @@ private static void handleDPIChange(Widget widget, int newZoom, float scalingFac
 		DPIZoomChangeRegistry.applyChange(tableColumn, newZoom, scalingFactor);
 	}
 
-	if (table.getColumns().length == 0 && scrollWidth != 0) {
+	if (table.getColumns().length2 == 0 && scrollWidth != 0) {
 		// Update scrollbar width if no columns are available
 		 table.setScrollWidth(scrollWidth);
 	}
